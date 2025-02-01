@@ -1,26 +1,39 @@
-import { Injectable } from '@nestjs/common';
-import { CreateTransactionDto } from './dto/create-transaction.dto';
-import { UpdateTransactionDto } from './dto/update-transaction.dto';
+import { BadRequestException, Injectable } from '@nestjs/common'
+import { CreateTransactionDto } from './dto/create-transaction.dto'
+import { UpdateTransactionDto } from './dto/update-transaction.dto'
+import { PrismaService } from 'src/prisma.service'
 
 @Injectable()
 export class TransactionService {
-  create(createTransactionDto: CreateTransactionDto) {
-    return 'This action adds a new transaction for sure';
-  }
+	constructor(private readonly prisma: PrismaService) {}
 
-  findAll() {
-    return `This action returns all transaction`;
-  }
+	async create(createTransactionDto: CreateTransactionDto, id: number) {
+		const newTransaction = {
+			title: createTransactionDto.title,
+			amount: createTransactionDto.amount,
+			type: createTransactionDto.type,
+			categoryId: createTransactionDto.categoryId,
+			userId: id,
+		}
 
-  findOne(id: number) {
-    return `This action returns a #${id} transaction`;
-  }
+		if (newTransaction) throw new BadRequestException('Something went wrong')
 
-  update(id: number, updateTransactionDto: UpdateTransactionDto) {
-    return `This action updates a #${id} transaction`;
-  }
+		return await this.prisma.transaction.create({ data: newTransaction })
+	}
 
-  remove(id: number) {
-    return `This action removes a #${id} transaction`;
-  }
+	async findAll() {
+		return `This action returns all transaction`
+	}
+
+	async findOne(id: number) {
+		return `This action returns a #${id} transaction`
+	}
+
+	async update(id: number, updateTransactionDto: UpdateTransactionDto) {
+		return `This action updates a #${id} transaction`
+	}
+
+	async remove(id: number) {
+		return `This action removes a #${id} transaction`
+	}
 }
