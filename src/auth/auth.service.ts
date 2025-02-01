@@ -23,7 +23,7 @@ export class AuthService {
     return new UnauthorizedException('Email or password are incorect');
   }
 
-  async login(user: IUser) {
+  login(user: IUser) {
     const { id, email } = user;
     return {
       ...user,
