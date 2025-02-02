@@ -1,4 +1,3 @@
-import { Category, User } from '@prisma/client'
 import { IsNotEmpty, IsNumber, IsString, MinLength } from 'class-validator'
 
 export class CreateTransactionDto {
